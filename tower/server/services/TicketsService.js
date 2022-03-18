@@ -1,5 +1,5 @@
 import { dbContext } from "../db/DbContext"
-import { Forbidden } from "../utils/Errors"
+import { BadRequest, Forbidden } from "../utils/Errors"
 import { towerEventsService } from "./TowerEventsService"
 
 class TicketsService {
@@ -14,6 +14,9 @@ class TicketsService {
       }
     async create(body) {
         const towerEvent = await towerEventsService.getById(body.eventId)
+        if(towerEvent.capacity <= 0) {
+            throw new BadRequest('there isnt any spots left')
+        }
         towerEvent.capacity--
         await towerEvent.save()
         const ticket = await dbContext.Tickets.create(body)
