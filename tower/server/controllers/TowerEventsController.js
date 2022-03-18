@@ -3,6 +3,7 @@ import { commentsService } from "../services/CommentsService";
 import { ticketsService } from "../services/TicketsService";
 import { towerEventsService } from "../services/TowerEventsService";
 import BaseController from "../utils/BaseController";
+import { BadRequest } from "../utils/Errors";
 
 export class TowerEventsController extends BaseController {
     constructor(){
@@ -54,6 +55,7 @@ export class TowerEventsController extends BaseController {
     async create(req, res, next){
         try {
             req.body.creatorId = req.userInfo.id
+            
             const towerEvent = await towerEventsService.create(req.body)
             await res.send(towerEvent)
         } catch (error) {

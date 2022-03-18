@@ -31,6 +31,11 @@ class TowerEventsService {
         return towerEvents
     }
     async create(body) {
+        const createdDate = new Date(body.startDate)
+        const currentDate = new Date()
+        if(createdDate < currentDate){
+            throw new BadRequest('make a date in the future')
+        }
         const towerEvent = await dbContext.TowerEvents.create(body)
         return towerEvent
     }
