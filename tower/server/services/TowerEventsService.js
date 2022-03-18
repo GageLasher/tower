@@ -7,6 +7,9 @@ class TowerEventsService {
         if(original.isCanceled){
             throw new BadRequest("this event is already canceled")
         }
+        if(original.creatorId.toString() !== update.creatorId){
+            throw new BadRequest('this isnt your event')
+        }
         original.name = update.name ? update.name : original.name
         original.description = update.description ? update.description : original.description
        
@@ -31,8 +34,11 @@ class TowerEventsService {
         const towerEvent = await dbContext.TowerEvents.create(body)
         return towerEvent
     }
-    async cancelEvent(id) {
-        const original = await dbContext.TowerEvents.findById(id)
+    async cancelEvent(body) {
+        const original = await dbContext.TowerEvents.findById(body.id)
+        if(original.creatorId.toString() !== body.creatorId){
+            throw new BadRequest('this isnt your event')
+        }
         if(original.isCanceled){
             throw new BadRequest("this event is already canceled")
         }

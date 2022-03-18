@@ -1,4 +1,6 @@
 import { Auth0Provider } from "@bcwdev/auth0provider";
+import { commentsService } from "../services/CommentsService";
+import { ticketsService } from "../services/TicketsService";
 import { towerEventsService } from "../services/TowerEventsService";
 import BaseController from "../utils/BaseController";
 
@@ -8,6 +10,8 @@ export class TowerEventsController extends BaseController {
         this.router
         .get('', this.getAll)
         .get('/:id', this.getById)
+        .get('/:id/tickets', this.getTickets)
+        .get('/:id/comments', this.getComments)
         .use(Auth0Provider.getAuthorizedUserInfo)
         .post('', this.create)
         .put('/:id', this.update)
@@ -31,6 +35,22 @@ export class TowerEventsController extends BaseController {
           next(error)
         }
       }
+      async getTickets(req, res, next) {
+        try {
+          const tickets = await ticketsService.getTowerEventTickets({ eventId: req.params.id })
+          return res.send(tickets)
+        } catch (error) {
+          next(error)
+        }
+      }
+      async getComments(req, res, next) {
+        try {
+          const comments = await commentsService.getComments({ eventId: req.params.id })
+          return res.send(comments)
+        } catch (error) {
+          next(error)
+        }
+      }
     async create(req, res, next){
         try {
             req.body.creatorId = req.userInfo.id
@@ -43,6 +63,7 @@ export class TowerEventsController extends BaseController {
     async update(req, res, next) {
         try {
           req.body.id = req.params.id
+          req.body.creatorId = req.userInfo.id
     
           const editedTowerEvent = await towerEventsService.update(req.body)
           return res.send(editedTowerEvent)
@@ -52,7 +73,9 @@ export class TowerEventsController extends BaseController {
       }
       async cancelEvent(req, res, next) {
         try {
-          const message = await towerEventsService.cancelEvent(req.params.id)
+            req.body.creatorId = req.userInfo.id
+            req.body.id = req.params.id
+          const message = await towerEventsService.cancelEvent(req.body)
           return res.send(message)
         } catch (error) {
           next(error)
