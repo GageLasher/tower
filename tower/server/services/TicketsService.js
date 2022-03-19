@@ -42,9 +42,12 @@ class TicketsService {
     }
     async remove(ticketId, userId) {
         const ticket = await dbContext.Tickets.find(ticketId)
+        const towerEvent = await towerEventsService.getById(ticket.eventId)
+        
         if (ticket.creatorId.toString() !== userId) {
           throw new Forbidden('this is not your ticket')
         }
+        towerEvent.capacity++
         await dbContext.Tickets.findByIdAndDelete(ticketId)
         return 'deleted'
       }
