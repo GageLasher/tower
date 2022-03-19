@@ -4,7 +4,7 @@ import { towerEventsService } from "./TowerEventsService"
 
 class TicketsService {
     async getAccountTickets(query) {
-        const accountTickets = await dbContext.Tickets.find(query).populate('towerevent')
+        const accountTickets = await dbContext.Tickets.find(query).populate('creator', 'name picture')
         return accountTickets.map(mongooseDocument => {
             const accountTicket = mongooseDocument.toJSON()
             return {
@@ -12,32 +12,34 @@ class TicketsService {
               eventId: accountTicket.eventId,
               accountId: accountTicket.accountId,
               ticketId: accountTicket.id,
-              ...accountTicket.towerevent
+              ...accountTicket.creator
             }
           })
         // return accountTickets
       
       }
       async getTowerEventTickets(query) {
-        const eventTickets = await dbContext.Tickets.find(query).populate('towerevent')
+        const eventTickets = await dbContext.Tickets.find(query).populate('creator')
         return eventTickets.map(mongooseDocument => {
             const eventTicket = mongooseDocument.toJSON()
             return {
                 
               eventId: eventTicket.eventId,
               ticketId: eventTicket.id,
-              ...eventTicket.towerevent
+              ...eventTicket.creator
             }
           })
       }
     async create(body) {
         const towerEvent = await towerEventsService.getById(body.eventId)
+        
         if(towerEvent.capacity <= 0) {
             throw new BadRequest('there isnt any spots left')
         }
         towerEvent.capacity--
         await towerEvent.save()
         const ticket = await dbContext.Tickets.create(body)
+        await ticket.populate('creator')
         return ticket
     }
     async remove(ticketId, userId) {

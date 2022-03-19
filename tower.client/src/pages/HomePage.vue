@@ -42,8 +42,10 @@ export default {
       },
          async goTo(id){
         try {
+          
             await eventsService.getActiveEvent(id)
           router.push({
+            
                         name: 'Event',
                         params: {id: AppState.activeEvent.id}
                     })

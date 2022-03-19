@@ -26,6 +26,15 @@
         </div>
     </div>
 </div>
+<h4 class="m-2">
+See who is attending...
+
+</h4>
+<div class="row bg-dark text-light shadow rounded m-2">
+<div class="col-12">
+    <Ticket />
+</div>
+</div>
 </div>
 </template>
 
@@ -36,6 +45,9 @@ import { AppState } from '../AppState'
 import { useRoute } from 'vue-router'
 import { eventsService } from '../services/EventsService'
 import { watchEffect } from '@vue/runtime-core'
+import { logger } from '../utils/Logger'
+import Pop from '../utils/Pop'
+import { ticketsService } from '../services/TicketsService'
 export default {
     setup(){
         const route = useRoute()
@@ -43,6 +55,7 @@ export default {
             try {
                      if(route.name == "Event"){
                     await eventsService.getActiveEvent(route.params.id)
+                    await ticketsService.getEventTickets(route.params.id)
 
                      }
             } catch (error) {
@@ -51,7 +64,8 @@ export default {
             }
         })
         return {
-            event: computed(() => AppState.activeEvent)
+            event: computed(() => AppState.activeEvent),
+            tickets: computed(() => AppState.eventTickets)
         }
     }
 }

@@ -18,7 +18,7 @@ export const TicketSchema = new Schema({
   })
 
   TicketSchema.virtual('creator', {
-    localField: 'creatorId',
+    localField: 'accountId',
     foreignField: '_id',
     justOne: true,
     ref: 'Profile'
