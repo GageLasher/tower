@@ -5,19 +5,26 @@
   <main>
     <router-view />
   </main>
-  <footer>
-    <div class="bg-dark text-light text-center p-4">
-      Made with 💖 by CodeWorks
-    </div>
-  </footer>
+  
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
 import { AppState } from './AppState'
+import { logger } from './utils/Logger'
+import Pop from './utils/Pop'
+import { eventsService } from '../src/services/EventsService'
 export default {
   name: 'App',
   setup() {
+    watchEffect(async () => {
+      try {
+          await eventsService.getAll()
+      } catch (error) {
+        logger.log(error)
+        Pop.toast(error.message, 'error')
+      }
+    })
     return {
       appState: computed(() => AppState)
     }

@@ -27,7 +27,7 @@ class TowerEventsService {
     return towerEvent
     }
     async getAll(query = {}) {
-        const towerEvents = await dbContext.TowerEvents.find(query)
+        const towerEvents = await dbContext.TowerEvents.find(query).populate('creator')
         return towerEvents
     }
     async create(body) {
@@ -37,6 +37,7 @@ class TowerEventsService {
             throw new BadRequest('make a date in the future')
         }
         const towerEvent = await dbContext.TowerEvents.create(body)
+        await towerEvent.populate('creator')
         return towerEvent
     }
     async cancelEvent(body) {

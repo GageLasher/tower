@@ -1,10 +1,12 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
     <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
-      <div class="d-flex flex-column align-items-center">
-        <img alt="logo" src="../assets/img/cw-logo.png" height="45" />
-      </div>
+     <h1>TOWER</h1>
     </router-link>
+    <button class="btn btn-success" v-if="account.id" data-bs-toggle="modal"
+            data-bs-target="#create-event">
+      Create Event
+    </button>
     <button
       class="navbar-toggler"
       type="button"
@@ -19,24 +21,27 @@
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto">
         <li>
-          <router-link
-            :to="{ name: 'About' }"
-            class="btn text-success lighten-30 selectable text-uppercase"
-          >
-            About
-          </router-link>
+          
         </li>
       </ul>
       <!-- LOGIN COMPONENT HERE -->
       <Login />
     </div>
+    <Modal id="create-event">
+            <template #title> Add Event</template>
+      <template #body><EventForm /> </template>
+            </Modal>
   </nav>
 </template>
 
 <script>
+import { computed } from '@vue/reactivity';
+import { AppState } from '../AppState';
 export default {
   setup() {
-    return {};
+    return {
+      account: computed(() => AppState.account)
+    };
   },
 };
 </script>

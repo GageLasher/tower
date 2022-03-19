@@ -31,7 +31,7 @@
       >
         <router-link :to="{ name: 'Account' }">
           <div class="list-group-item list-group-item-action hoverable">
-            Manage Account
+            View Your Profile
           </div>
         </router-link>
         <div
