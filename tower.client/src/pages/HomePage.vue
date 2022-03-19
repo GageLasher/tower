@@ -1,6 +1,10 @@
 <template>
 <div class="container-fluid">
- 
+ <div class="row">
+   <div class="col-12">
+     <img src="../assets/img/banner.png" alt="" class="img-fluid">
+   </div>
+ </div>
 <div class="row bg-dark text-light shadow me-1 ms-1 mt-3">
   <div class="col-12 d-flex justify-content-between p-2">
     <h4  class="selectable" title="All Events" @click="getAll()">All</h4>
@@ -42,7 +46,7 @@ export default {
       },
          async goTo(id){
         try {
-          
+
             await eventsService.getActiveEvent(id)
           router.push({
             
