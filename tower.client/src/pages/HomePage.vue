@@ -31,10 +31,21 @@ import { computed } from '@vue/reactivity'
 import { AppState } from '../AppState'
 import { eventsService } from '../services/EventsService'
 import { useRouter } from 'vue-router'
+import { watchEffect } from '@vue/runtime-core'
+import { logger } from '../utils/Logger'
+import Pop from '../utils/Pop'
 export default {
    name: 'Home',
   setup(){
     const router = useRouter()
+    watchEffect(async() => {
+      try {
+        await eventsService.getAll()
+      } catch (error) {
+        logger.error(error)
+          Pop.toast(error.message, 'error')
+      }
+    })
     return {
       events: computed(() => AppState.towerEvents),
 

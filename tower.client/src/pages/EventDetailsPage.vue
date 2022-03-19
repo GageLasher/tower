@@ -23,15 +23,18 @@
               <span class="text-primary me-2"> {{ event.capacity }}</span> Spots
               Left</span
             >
-            <button class="btn btn-warning d-flex justify-content-end mb-2">
+            <button class="btn btn-warning d-flex justify-content-end mb-2" v-if="!canceledOrFull">
               Attend
+            </button>
+             <button class="btn btn-danger d-flex justify-content-end mb-2" v-if="event.creatorId == account.id" @click="cancelEvent">
+              Cancel Event
             </button>
           </div>
         </div>
       </div>
     </div>
     <h4 class="m-2">See who is attending...</h4>
-    <div class="row bg-dark text-light shadow rounded m-2">
+    <div class="row bg-dark text-light shadow rounded m-2 d-flex">
       <div class="col-12">
         <Ticket />
       </div>
@@ -112,6 +115,18 @@ export default {
       event: computed(() => AppState.activeEvent),
       tickets: computed(() => AppState.eventTickets),
       comments: computed(() => AppState.comments.filter(c => c.eventId == AppState.activeEvent.id)),
+      account: computed(() => AppState.account),
+      canceledOrFull: computed(() => {
+          if(AppState.activeEvent.isCanceled || AppState.activeEvent.capacity <= 0){return true}
+      }),
+        async cancelEvent(){
+            try {
+                await eventsService.cancelEvent(AppState.activeEvent.id)
+            } catch (error) {
+                logger.error(error)
+                   Pop.toast(error.message, 'error')
+            }
+        },
         async addComment(){
                try {
                    logger.log(editable.value)

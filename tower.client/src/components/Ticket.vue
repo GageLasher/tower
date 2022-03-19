@@ -1,6 +1,9 @@
 <template>
-<div v-for="t in tickets" :key="t.id">
-<img :src="t.picture" alt="" :title="t.name" class="p-3">
+<div class="row d-flex">
+
+<div v-for="t in tickets" :key="t.id" class="col-1">
+<img :src="t.picture" alt="" :title="t.name" class="p-2">
+</div>
 </div>
 </template>
 
@@ -31,8 +34,8 @@ export default {
 
 <style lang="scss" scoped>
 img{
-    height: 10vh;
-    width: 10vh;
+    height: 7vh;
+    width: 7vh;
     border-radius: 50%;
 }
 </style>
