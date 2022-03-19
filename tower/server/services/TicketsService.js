@@ -5,12 +5,30 @@ import { towerEventsService } from "./TowerEventsService"
 class TicketsService {
     async getAccountTickets(query) {
         const accountTickets = await dbContext.Tickets.find(query).populate('towerevent')
-        return accountTickets
+        return accountTickets.map(mongooseDocument => {
+            const accountTicket = mongooseDocument.toJSON()
+            return {
+                
+              eventId: accountTicket.eventId,
+              accountId: accountTicket.accountId,
+              ticketId: accountTicket.id,
+              ...accountTicket.towerevent
+            }
+          })
+        // return accountTickets
       
       }
       async getTowerEventTickets(query) {
         const eventTickets = await dbContext.Tickets.find(query).populate('towerevent')
-        return eventTickets
+        return eventTickets.map(mongooseDocument => {
+            const eventTicket = mongooseDocument.toJSON()
+            return {
+                
+              eventId: eventTicket.eventId,
+              ticketId: eventTicket.id,
+              ...eventTicket.towerevent
+            }
+          })
       }
     async create(body) {
         const towerEvent = await towerEventsService.getById(body.eventId)
