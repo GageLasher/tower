@@ -21,6 +21,9 @@ class EventsService {
     async cancelEvent(id){
         const res = await api.delete('api/events/' + id)
     }
+    async editEvent(body, id){
+        const res = await api.put('api/events/' + id, body)
+    }
 }
 
 export const eventsService = new EventsService()

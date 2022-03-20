@@ -9,6 +9,8 @@
           <div class="col-12 d-flex justify-content-between">
             <h3 class="me-3">{{ event.name }}</h3>
             <h3 class="ms-2">{{ new Date(event.startDate).toDateString() }}</h3>
+            <h3 class="selectable" title="edit event" data-bs-toggle="modal"
+            data-bs-target="#edit-event" v-if="!userOrCanceled">...</h3>
           </div>
           <div class="col-12">
             <h5>{{ event.location }}</h5>
@@ -26,7 +28,7 @@
             <button class="btn btn-warning d-flex justify-content-end mb-2" v-if="!canceledOrFull">
               Attend
             </button>
-             <button class="btn btn-danger d-flex justify-content-end mb-2" v-if="event.creatorId == account.id" @click="cancelEvent">
+             <button class="btn btn-danger d-flex justify-content-end mb-2" v-if="!userOrCanceled" @click="cancelEvent">
               Cancel Event
             </button>
           </div>
@@ -78,6 +80,10 @@
       </div>
     </div>
   </div>
+  <Modal id="edit-event">
+            <template #title> Edit Event</template>
+      <template #body><EditEvent /> </template>
+            </Modal>
 </template>
 
 
@@ -118,6 +124,11 @@ export default {
       account: computed(() => AppState.account),
       canceledOrFull: computed(() => {
           if(AppState.activeEvent.isCanceled || AppState.activeEvent.capacity <= 0){return true}
+      }),
+      userOrCanceled: computed(() => {
+          if(AppState.activeEvent.isCanceled || AppState.activeEvent.creatorId !== AppState.account.id){
+              return true
+          }
       }),
         async cancelEvent(){
             try {
