@@ -6,7 +6,7 @@
    </div>
  </div>
 <div class="row bg-dark text-light shadow me-1 ms-1 mt-3">
-  <div class="col-12 d-flex justify-content-between p-2">
+  <div class="col-12 d-flex justify-content-around p-2">
     <h4  class="selectable" title="All Events" @click="getAll()">All</h4>
 
     <h4 class="selectable" title="Conventions" @click="filter('convention')">Conventions</h4>
@@ -17,7 +17,7 @@
   </div>
 </div>
  <div class="row">
-   <div class="col-md-3 mt-4 selectable" :title="e.name" v-for="e in events" :key="e.id"  @click="goTo(e.id)">
+   <div class="col-md-3 mt-4 hoverable" :title="e.name" v-for="e in events" :key="e.id"  @click="goTo(e.id)">
      <TowerEvent :event="e" />
    </div>
  </div>
@@ -82,5 +82,15 @@ export default {
   height: 250px;
   width: 1000px;  
   
+}
+.hoverable:hover{
+  transform: scale(1.09);
+  filter: drop-shadow(0px 15px 10px rgba(0, 0, 0, 0.3));
+  transition: 50ms ease-in-out;
+  cursor: pointer;
+  .hoverable:active{
+    transform: scale(0.98);
+    transition: 50ms ease-in-out;
+  }
 }
 </style>

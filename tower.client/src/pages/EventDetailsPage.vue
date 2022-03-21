@@ -21,6 +21,9 @@
               {{ event.description }}
             </p>
           </div>
+          <div class="mt-5">
+
+          </div>
           <div class="col-12 d-flex justify-content-between">
             <span>
               <span class="text-primary me-2"> {{ event.capacity }}</span> Spots
@@ -158,7 +161,10 @@ export default {
         },
         async cancelEvent(){
             try {
+              if(await Pop.confirm('Are you sure you want to cancel this event?')){
+
                 await eventsService.cancelEvent(AppState.activeEvent.id)
+              }
             } catch (error) {
                 logger.error(error)
                    Pop.toast(error.message, 'error')
