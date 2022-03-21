@@ -4,15 +4,14 @@ import { towerEventsService } from "./TowerEventsService"
 
 class TicketsService {
     async getAccountTickets(query) {
-        const accountTickets = await dbContext.Tickets.find(query).populate('creator', 'name picture').populate('towerevent')
+        const accountTickets = await dbContext.Tickets.find(query).populate('towerevent')
         return accountTickets.map(mongooseDocument => {
             const accountTicket = mongooseDocument.toJSON()
             return {
                 
-              eventId: accountTicket.eventId,
-              accountId: accountTicket.accountId,
               ticketId: accountTicket.id,
-              ...accountTicket.creator,
+              accountId: accountTicket.accountId,
+
               ...accountTicket.towerevent
             }
           })
@@ -25,8 +24,8 @@ class TicketsService {
             const eventTicket = mongooseDocument.toJSON()
             return {
                 
-              eventId: eventTicket.eventId,
               ticketId: eventTicket.id,
+              eventId: eventTicket.eventId,
               ...eventTicket.creator
             }
           })
@@ -45,12 +44,13 @@ class TicketsService {
     }
     async remove(ticketId, userId) {
         const ticket = await dbContext.Tickets.findById(ticketId)
-        const towerEvent = await towerEventsService.getById(ticket.eventId)
+        const towerEvent = await dbContext.TowerEvents.findById(ticket.eventId)
         
-        if (ticket.creatorId.toString() !== userId) {
+        if (ticket.accountId.toString() !== userId) {
           throw new Forbidden('this is not your ticket')
         }
         towerEvent.capacity++
+        await towerEvent.save()
         await dbContext.Tickets.findByIdAndDelete(ticketId)
         return 'deleted'
       }

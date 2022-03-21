@@ -129,7 +129,7 @@ export default {
       myTickets: computed(() => AppState.myTickets),
       canceledOrFull: computed(() => {
          let ticket = AppState.eventTickets.find((t) => t.id == AppState.account.id)
-         logger.log(ticket)
+         logger.log('I am a computed for event ticket', ticket)
           if(AppState.activeEvent.isCanceled || AppState.activeEvent.capacity <= 0 || ticket){return true}
       }),
       userOrCanceled: computed(() => {

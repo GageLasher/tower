@@ -5,7 +5,7 @@ import { api } from "./AxiosService"
 class TicketsService {
     async getEventTickets(eventId){
         const res = await api.get('api/events/' + eventId + '/tickets')
-        logger.log(res.data)
+        logger.log('event tickets log',res.data )
         AppState.eventTickets = res.data
     }
     async attend(body){
@@ -23,6 +23,7 @@ class TicketsService {
     async remove(id){
         const res = await api.delete('api/tickets/' + id)
         AppState.myTickets = AppState.myTickets.filter(mt => mt.ticketId !== id)
+        
     }
 }
 

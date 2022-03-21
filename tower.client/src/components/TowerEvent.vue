@@ -58,9 +58,14 @@ export default {
             }),
             async notGoing(){
                 try {
-                    let ticket = AppState.myTickets.find(mt => mt.eventId == props.event.id)
-                    logger.log(ticket)
+                    logger.log(AppState.myTickets)
+                    let ticket = AppState.myTickets.find(mt => mt.id == props.event.id)
+                    // logger.log(ticket)
+                    // logger.log(ticket.ticketId)
                     await ticketsService.remove(ticket.ticketId)
+                   let event = AppState.towerEvents.find(te => te.id == props.event.id)
+                   event.capacity++
+                   logger.log(event)
                 } catch (error) {
                     logger.error(error)
           Pop.toast(error.message, 'error')
