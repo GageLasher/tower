@@ -26,6 +26,7 @@ class TicketsService {
                 
               ticketId: eventTicket.id,
               eventId: eventTicket.eventId,
+              accountId: eventTicket.accountId,
               ...eventTicket.creator
             }
           })

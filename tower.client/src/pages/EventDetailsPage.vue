@@ -102,15 +102,19 @@ export default {
   setup() {
     const route = useRoute()
     const editable = ref({})
+    
     watchEffect(async () => {
       try {
         if (route.name == "Event") {
           await eventsService.getActiveEvent(route.params.id)
           await ticketsService.getEventTickets(route.params.id)
               await commentsService.getComments(AppState.activeEvent.id)
+
           if(AppState.account.id){
 
               await ticketsService.getAccountTickets()
+              let ticket = AppState.eventTickets.find((t) => t.accountId == AppState.account.id)
+              
           }
 
         }
@@ -122,13 +126,16 @@ export default {
     
     return {
         editable,
+        
       event: computed(() => AppState.activeEvent),
       tickets: computed(() => AppState.eventTickets),
       comments: computed(() => AppState.comments.filter(c => c.eventId == AppState.activeEvent.id)),
       account: computed(() => AppState.account),
       myTickets: computed(() => AppState.myTickets),
       canceledOrFull: computed(() => {
-         let ticket = AppState.eventTickets.find((t) => t.id == AppState.account.id)
+          AppState.eventTickets
+          logger.log('i am event tickets',AppState.eventTickets)
+         let ticket = AppState.eventTickets.find((t) => t.accountId == AppState.account.id)
          logger.log('I am a computed for event ticket', ticket)
           if(AppState.activeEvent.isCanceled || AppState.activeEvent.capacity <= 0 || ticket){return true}
       }),

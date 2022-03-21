@@ -20,6 +20,7 @@ class EventsService {
     }
     async cancelEvent(id){
         const res = await api.delete('api/events/' + id)
+        AppState.activeEvent.isCanceled = true
     }
     async editEvent(body, id){
         const res = await api.put('api/events/' + id, body)
