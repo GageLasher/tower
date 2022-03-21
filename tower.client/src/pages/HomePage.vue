@@ -2,7 +2,7 @@
 <div class="container-fluid">
  <div class="row">
    <div class="col-12">
-     <img src="../assets/img/banner.png" alt="" class="img-fluid">
+     <img src="../assets/img/eventlogo.png" alt="" class="img-fluid">
    </div>
  </div>
 <div class="row bg-dark text-light shadow me-1 ms-1 mt-3">
