@@ -34,7 +34,7 @@
          <div class="row p-3">
         <div class="col-12">
             <label for="">Date: </label>
-            <input v-model="editable.startDate" type="date" name="" id="">
+            <input v-model="editable.startDate" type="date" name="" id="" :min="minDate.toISOString().split('T')[0]">
         </div>
         </div>
          <div class="row p-3">
@@ -91,6 +91,14 @@ export default {
     
         return {
             editable,
+            minDate: computed(() => {
+                const today = new Date()
+
+            
+            let tomorrow =  new Date()
+            tomorrow.setDate(today.getDate() + 1)
+            return tomorrow
+            }),
             async createEvent(){
                 try {
                     await eventsService.createEvent(editable.value)

@@ -5,7 +5,7 @@ import { api } from "./AxiosService"
 class EventsService {
     async getAll(query = ""){
         const res = await api.get('api/events/' + query)
-        logger.log(res.data)
+        // logger.log(res.data)
         AppState.towerEvents = res.data
     }
     async createEvent(body){

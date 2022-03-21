@@ -134,9 +134,9 @@ export default {
       myTickets: computed(() => AppState.myTickets),
       canceledOrFull: computed(() => {
           AppState.eventTickets
-          logger.log('i am event tickets',AppState.eventTickets)
+          // logger.log('i am event tickets',AppState.eventTickets)
          let ticket = AppState.eventTickets.find((t) => t.accountId == AppState.account.id)
-         logger.log('I am a computed for event ticket', ticket)
+        //  logger.log('I am a computed for event ticket', ticket)
           if(AppState.activeEvent.isCanceled || AppState.activeEvent.capacity <= 0 || ticket){return true}
       }),
       userOrCanceled: computed(() => {
@@ -165,7 +165,7 @@ export default {
         },
         async addComment(){
                try {
-                   logger.log(editable.value)
+                  //  logger.log(editable.value)
                    editable.value.eventId = AppState.activeEvent.id
                    await commentsService.addComment(editable.value)
                    editable.value = {}
