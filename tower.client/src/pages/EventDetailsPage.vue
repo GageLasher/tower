@@ -11,6 +11,7 @@
             <h3 class="ms-2">{{ new Date(event.startDate).toDateString() }}</h3>
             <h3 class="selectable" title="edit event" data-bs-toggle="modal"
             data-bs-target="#edit-event" v-if="!userOrCanceled">...</h3>
+            <h3 class="me-3 text-red" v-if="event.isCanceled">Event is Canceled </h3>
           </div>
           <div class="col-12">
             <h5>{{ event.location }}</h5>
@@ -182,4 +183,8 @@ export default {
 
 
 <style lang="scss" scoped>
+.text-red{
+  color: red;
+  font-weight: bold;
+}
 </style>
