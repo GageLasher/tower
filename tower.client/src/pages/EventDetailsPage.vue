@@ -70,7 +70,7 @@
                     </div>
                 </form>
               </div>
-              <div class="row d-flex justify-content-center m-2" v-for="c in comments" :key="c.id">
+              <div class="row d-flex justify-content-center mt-2 mb-2 p-2" v-for="c in comments" :key="c.id">
                   <Comment :comment="c" />
               </div>
                 

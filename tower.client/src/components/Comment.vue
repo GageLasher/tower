@@ -1,8 +1,8 @@
 <template>
-    <div class="col-md-2 col-xs-2">
-        <img :src="comment.creator.picture" alt="">
+    <div class="col-2">
+        <img :src="comment.creator.picture" alt="" class="img-fluid">
     </div>
-    <div class="col-md-8 col-xs-8 bg-light text-dark">
+    <div class="col-7 bg-light text-dark">
         <div class="row">
             <div class="col-12 d-flex justify-content-between" >
                 

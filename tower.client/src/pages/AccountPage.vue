@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-        <h3>My Events</h3>
+        <h3>Your upcoming events...</h3>
       </div>
     </div>
     <div class="row">
