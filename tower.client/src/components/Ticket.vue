@@ -1,7 +1,7 @@
 <template>
 <div class="row d-flex">
 
-<div v-for="t in tickets" :key="t.id" class="col-1">
+<div v-for="t in tickets" :key="t.id" class="col-md-1">
 <img :src="t.picture" alt="" :title="t.name" class="p-2">
 </div>
 </div>

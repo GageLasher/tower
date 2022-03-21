@@ -4,7 +4,7 @@ import { towerEventsService } from "./TowerEventsService"
 
 class TicketsService {
     async getAccountTickets(query) {
-        const accountTickets = await dbContext.Tickets.find(query).populate('creator', 'name picture')
+        const accountTickets = await dbContext.Tickets.find(query).populate('creator', 'name picture').populate('towerevent')
         return accountTickets.map(mongooseDocument => {
             const accountTicket = mongooseDocument.toJSON()
             return {
@@ -12,7 +12,8 @@ class TicketsService {
               eventId: accountTicket.eventId,
               accountId: accountTicket.accountId,
               ticketId: accountTicket.id,
-              ...accountTicket.creator
+              ...accountTicket.creator,
+              ...accountTicket.towerevent
             }
           })
         // return accountTickets
@@ -43,7 +44,7 @@ class TicketsService {
         return ticket
     }
     async remove(ticketId, userId) {
-        const ticket = await dbContext.Tickets.find(ticketId)
+        const ticket = await dbContext.Tickets.findById(ticketId)
         const towerEvent = await towerEventsService.getById(ticket.eventId)
         
         if (ticket.creatorId.toString() !== userId) {

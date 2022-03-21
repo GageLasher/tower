@@ -25,7 +25,7 @@
               <span class="text-primary me-2"> {{ event.capacity }}</span> Spots
               Left</span
             >
-            <button class="btn btn-warning d-flex justify-content-end mb-2" v-if="!canceledOrFull">
+            <button class="btn btn-warning d-flex justify-content-end mb-2" v-if="!canceledOrFull" @click="attend(event.id)">
               Attend
             </button>
              <button class="btn btn-danger d-flex justify-content-end mb-2" v-if="!userOrCanceled" @click="cancelEvent">
@@ -43,7 +43,7 @@
     </div>
     <div class="div">
       <div class="row justify-content-center">
-        <div class="col-8 mt-5">
+        <div class="col-md-8 mt-5">
           <h4>What are people saying...</h4>
           <div class="bg-dark text-light">
             <div class="row">
@@ -107,7 +107,11 @@ export default {
         if (route.name == "Event") {
           await eventsService.getActiveEvent(route.params.id)
           await ticketsService.getEventTickets(route.params.id)
-          await commentsService.getComments(AppState.activeEvent.id)
+              await commentsService.getComments(AppState.activeEvent.id)
+          if(AppState.account.id){
+
+              await ticketsService.getAccountTickets()
+          }
 
         }
       } catch (error) {
@@ -122,14 +126,28 @@ export default {
       tickets: computed(() => AppState.eventTickets),
       comments: computed(() => AppState.comments.filter(c => c.eventId == AppState.activeEvent.id)),
       account: computed(() => AppState.account),
+      myTickets: computed(() => AppState.myTickets),
       canceledOrFull: computed(() => {
-          if(AppState.activeEvent.isCanceled || AppState.activeEvent.capacity <= 0){return true}
+         let ticket = AppState.eventTickets.find((t) => t.id == AppState.account.id)
+         logger.log(ticket)
+          if(AppState.activeEvent.isCanceled || AppState.activeEvent.capacity <= 0 || ticket){return true}
       }),
       userOrCanceled: computed(() => {
           if(AppState.activeEvent.isCanceled || AppState.activeEvent.creatorId !== AppState.account.id){
               return true
           }
       }),
+        async attend(id){
+            try {
+                let ticket = {
+                    eventId: id
+                }
+                await ticketsService.attend(ticket)
+            } catch (error) {
+                logger.error(error)
+                   Pop.toast(error.message, 'error')
+            }
+        },
         async cancelEvent(){
             try {
                 await eventsService.cancelEvent(AppState.activeEvent.id)
